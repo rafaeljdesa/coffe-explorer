@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.coffe.explorer.core.domain.service.FlavorServiceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2022-06-17T19:48:14" hostname="DESKTOP-V5Q2D03" time="0.933">
+  <properties/>
+  <testcase name="findFlavorsEmptyTest()" classname="br.com.coffe.explorer.core.domain.service.FlavorServiceTest" time="0.873"/>
+  <testcase name="findFlavorsGroupingByRootsTest()" classname="br.com.coffe.explorer.core.domain.service.FlavorServiceTest" time="0.047"/>
+  <testcase name="findFlavorsGroupingByRootsNotFoundTest()" classname="br.com.coffe.explorer.core.domain.service.FlavorServiceTest" time="0.004"/>
+  <testcase name="findFlavorsTest()" classname="br.com.coffe.explorer.core.domain.service.FlavorServiceTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
