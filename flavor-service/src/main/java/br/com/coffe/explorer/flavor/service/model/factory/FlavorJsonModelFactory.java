@@ -7,6 +7,10 @@ public class FlavorJsonModelFactory {
 
     public static FlavorJsonModel create(FlavorModel flavorModel) {
         if (flavorModel == null) return null;
-        return new FlavorJsonModel(flavorModel.name(), FlavorJsonModelFactory.create(flavorModel.parentFlavor()));
+        return new FlavorJsonModel(
+                flavorModel.code(),
+                flavorModel.name(),
+                FlavorJsonModelFactory.create(flavorModel.parentFlavor())
+        );
     }
 }

@@ -1,0 +1,4 @@
+rootProject.name = 'coffe-service'
+
+include ':core-domain'
+project(':core-domain').projectDir = file('../core-domain')

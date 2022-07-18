@@ -41,6 +41,13 @@ public class FlavorService implements FlavorInbound {
                 .toList();
     }
 
+    @Override
+    public FlavorModel findByCode(String flavorCode) {
+        return flavorRepository.findByCode(flavorCode)
+                .map(FlavorModelFactory::create)
+                .orElseThrow(FlavorNotFoundException::new);
+    }
+
     private FlavorGroupedModel getFlavorGroupedModel(FlavorModel root, List<FlavorModel> flavors) {
         return new FlavorGroupedModel(root.code(), root.name(), getChildsRecursively(root, flavors));
     }

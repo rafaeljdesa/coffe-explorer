@@ -9,4 +9,5 @@ public interface FlavorInbound {
 
     List<FlavorModel> findFlavors();
     List<FlavorGroupedModel> findFlavorsGroupingByRoots();
+    FlavorModel findByCode(String flavorCode);
 }

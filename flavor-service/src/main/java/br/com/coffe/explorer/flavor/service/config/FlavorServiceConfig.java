@@ -5,9 +5,11 @@ import br.com.coffe.explorer.core.domain.port.output.FlavorRepository;
 import br.com.coffe.explorer.core.domain.service.FlavorService;
 import br.com.coffe.explorer.flavor.service.repository.FlavorInMemoryRepository;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ComponentScan("br.com.coffe.explorer")
 public class FlavorServiceConfig {
 
     @Bean
