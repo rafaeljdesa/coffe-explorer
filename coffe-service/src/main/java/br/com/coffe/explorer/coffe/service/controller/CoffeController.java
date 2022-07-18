@@ -21,7 +21,7 @@ public class CoffeController {
 
     @PostMapping
     public ResponseEntity<?> createCoffe(@RequestBody CoffeModel coffeModel) {
-        coffeInbound.createCoffe(coffeModel, coffeModel.createdBy());
+        coffeInbound.createCoffe(coffeModel);
         return ResponseEntity.status(HttpStatus.CREATED.value())
                 .build();
     }

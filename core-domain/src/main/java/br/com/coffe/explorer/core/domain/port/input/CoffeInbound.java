@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CoffeInbound {
 
-    void createCoffe(CoffeModel coffeModel, String user);
+    void createCoffe(CoffeModel coffeModel);
     List<CoffeModel> findByFlavorCode(String flavorCode);
 }

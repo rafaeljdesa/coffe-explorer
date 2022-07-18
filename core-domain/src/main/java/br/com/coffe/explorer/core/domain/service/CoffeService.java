@@ -23,13 +23,13 @@ public class CoffeService implements CoffeInbound {
     }
 
     @Override
-    public void createCoffe(CoffeModel coffeModel, String user) {
+    public void createCoffe(CoffeModel coffeModel) {
         Flavor flavor = flavorRepository
                 .findByCode(coffeModel.flavorCode())
                 .orElseThrow(FlavorNotFoundException::new);
 
         Coffe coffe = new Coffe.Builder()
-                .createdBy(user)
+                .createdBy(coffeModel.createdBy())
                 .withDescription(coffeModel.description())
                 .withFlavor(flavor)
                 .build();
