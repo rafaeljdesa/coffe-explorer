@@ -1,5 +1,7 @@
 package br.com.coffe.explorer.coffe.service.controller;
 
+import br.com.coffe.explorer.coffe.service.model.CoffeJsonModel;
+import br.com.coffe.explorer.coffe.service.model.factory.CoffeJsonModelFactory;
 import br.com.coffe.explorer.core.domain.model.CoffeModel;
 import br.com.coffe.explorer.core.domain.port.input.CoffeInbound;
 import org.springframework.http.HttpStatus;
@@ -20,8 +22,8 @@ public class CoffeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCoffe(@RequestBody CoffeModel coffeModel) {
-        coffeInbound.createCoffe(coffeModel);
+    public ResponseEntity<?> createCoffe(@RequestBody CoffeJsonModel coffeJsonModel) {
+        coffeInbound.createCoffe(CoffeJsonModelFactory.create(coffeJsonModel));
         return ResponseEntity.status(HttpStatus.CREATED.value())
                 .build();
     }

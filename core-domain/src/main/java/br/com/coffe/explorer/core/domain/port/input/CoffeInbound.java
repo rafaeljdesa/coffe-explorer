@@ -8,4 +8,5 @@ public interface CoffeInbound {
 
     void createCoffe(CoffeModel coffeModel);
     List<CoffeModel> findByFlavorCode(String flavorCode);
+    void uploadImages(List<Object> images, String coffeId);
 }

@@ -31,6 +31,17 @@ public class Coffe {
     private final Flavor flavor;
     private final List<String> imagesUrls;
 
+    public Coffe cloneUpdatingImages(List<String> imagesUrls) {
+        return new Coffe(
+                this.id,
+                this.description,
+                this.creationDateTime,
+                this.createdBy,
+                this.flavor,
+                imagesUrls
+        );
+    }
+
     public static class Builder {
 
         private String id;

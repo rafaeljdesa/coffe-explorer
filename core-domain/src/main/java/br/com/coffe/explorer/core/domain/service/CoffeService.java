@@ -9,17 +9,24 @@ import br.com.coffe.explorer.core.domain.model.factory.CoffeModelFactory;
 import br.com.coffe.explorer.core.domain.port.input.CoffeInbound;
 import br.com.coffe.explorer.core.domain.port.output.CoffeRepository;
 import br.com.coffe.explorer.core.domain.port.output.FlavorRepository;
+import br.com.coffe.explorer.core.domain.port.output.ImageRepository;
+
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 public class CoffeService implements CoffeInbound {
 
     private final CoffeRepository coffeRepository;
     private final FlavorRepository flavorRepository;
+    private final ImageRepository imageRepository;
 
     public CoffeService(CoffeRepository coffeRepository,
-                        FlavorRepository flavorRepository) {
+                        FlavorRepository flavorRepository,
+                        ImageRepository imageRepository) {
         this.coffeRepository = coffeRepository;
         this.flavorRepository = flavorRepository;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -44,5 +51,18 @@ public class CoffeService implements CoffeInbound {
                 .stream()
                 .map(CoffeModelFactory::create)
                 .toList();
+    }
+
+    @Override
+    public void uploadImages(List<Object> images, String coffeId) {
+        Coffe coffe = coffeRepository.findById(coffeId)
+                .orElseThrow(CoffeNotFoundException::new);
+
+        List<String> imagesUrls = images.stream()
+                .map(imageRepository::uploadImage)
+                .toList();
+
+        Coffe coffeWithImages = coffe.cloneUpdatingImages(imagesUrls);
+        coffeRepository.updateCoffe(coffeWithImages);
     }
 }
