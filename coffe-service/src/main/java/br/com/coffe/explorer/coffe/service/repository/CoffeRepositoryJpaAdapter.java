@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class CoffeRepositoryJpaAdapter implements CoffeRepository {
@@ -61,6 +62,7 @@ public class CoffeRepositoryJpaAdapter implements CoffeRepository {
 
         List<CoffeImageTableEntity> imagesTableEntities = coffe.getImagesUrls().stream()
                 .map(url -> CoffeImageTableEntity.builder()
+                        .id(UUID.randomUUID().toString())
                         .url(url)
                         .coffeId(coffeId)
                         .build()

@@ -11,6 +11,7 @@ import br.com.coffe.explorer.core.domain.port.output.CoffeRepository;
 import br.com.coffe.explorer.core.domain.port.output.FlavorRepository;
 import br.com.coffe.explorer.core.domain.port.output.ImageRepository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -54,11 +55,11 @@ public class CoffeService implements CoffeInbound {
     }
 
     @Override
-    public void uploadImages(List<Object> images, String coffeId) {
+    public void uploadImages(Object[] images, String coffeId) {
         Coffe coffe = coffeRepository.findById(coffeId)
                 .orElseThrow(CoffeNotFoundException::new);
 
-        List<String> imagesUrls = images.stream()
+        List<String> imagesUrls = Arrays.stream(images)
                 .map(imageRepository::uploadImage)
                 .toList();
 

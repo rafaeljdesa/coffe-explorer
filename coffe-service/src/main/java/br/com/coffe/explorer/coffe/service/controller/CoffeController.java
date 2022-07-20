@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -36,5 +39,12 @@ public class CoffeController {
                     .build();
         }
         return ResponseEntity.ok(coffes);
+    }
+
+    @PostMapping("/{coffeId}/images")
+    public ResponseEntity<?> uploadImage(@PathVariable("coffeId") String coffeId,
+                                         @RequestParam("files") MultipartFile[] files) {
+        coffeInbound.uploadImages(files, coffeId);
+        return ResponseEntity.ok().build();
     }
 }
