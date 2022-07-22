@@ -10,17 +10,15 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping("/v1/coffes")
-public class CoffeController {
+public class CoffeRestController {
 
     private final CoffeInbound coffeInbound;
 
-    public CoffeController(CoffeInbound coffeInbound) {
+    public CoffeRestController(CoffeInbound coffeInbound) {
         this.coffeInbound = coffeInbound;
     }
 
