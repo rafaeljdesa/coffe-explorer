@@ -6,7 +6,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -57,7 +56,7 @@ public class ImageAmazonS3Adapter implements ImageRepository {
                     objectMetadata
             ).withCannedAcl(CannedAccessControlList.Private);
 
-            PutObjectResult putObjectResult = amazonS3.putObject(putObjectRequest);
+            amazonS3.putObject(putObjectRequest);
 
             inputStream.close();
 
