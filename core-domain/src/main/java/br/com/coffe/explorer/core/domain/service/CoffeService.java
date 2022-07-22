@@ -13,6 +13,7 @@ import br.com.coffe.explorer.core.domain.port.output.ImageRepository;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -61,6 +62,7 @@ public class CoffeService implements CoffeInbound {
 
         List<String> imagesUrls = Arrays.stream(images)
                 .map(imageRepository::uploadImage)
+                .filter(Objects::nonNull)
                 .toList();
 
         Coffe coffeWithImages = coffe.cloneUpdatingImages(imagesUrls);
