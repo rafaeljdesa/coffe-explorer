@@ -1,6 +1,6 @@
 package br.com.coffe.explorer.coffe.service.gateway;
 
-import br.com.coffe.explorer.core.domain.exception.FileValidationException;
+import br.com.coffe.explorer.core.domain.exception.FileUploadException;
 import br.com.coffe.explorer.core.domain.port.output.ImageRepository;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -62,17 +62,24 @@ public class ImageAmazonS3Adapter implements ImageRepository {
 
             return "https://" + bucketName + ".s3.amazonaws.com/" + key;
         } catch (Exception e) {
-            log.error("Occurred an error to upload file to Amazon S3", e);
+            String message = "Occurred an error to upload file to Amazon S3: " + e.getMessage();
+            log.error(message, e);
+            throw new FileUploadException(message);
         }
-        return null;
+    }
+
+    @Override
+    public String getFileName(Object image) {
+        MultipartFile multipartFile = (MultipartFile) image;
+        return multipartFile.getOriginalFilename();
     }
 
     private void validateImage(MultipartFile file) {
         if (!Arrays.asList(VALID_IMAGE_TYPES).contains(file.getContentType())) {
-            throw new FileValidationException("The content type of file is invalid");
+            throw new FileUploadException("The content type of file is invalid");
         }
         if (file.getSize() > IMAGE_MAX_SIZE_IN_BYTES) {
-            throw new FileValidationException("The file size is invalid");
+            throw new FileUploadException("The file size is invalid");
         }
     }
 }

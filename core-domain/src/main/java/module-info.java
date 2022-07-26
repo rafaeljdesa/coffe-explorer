@@ -5,4 +5,5 @@ module br.com.coffe.explorer.core.domain {
     exports br.com.coffe.explorer.core.domain.model;
     exports br.com.coffe.explorer.core.domain.entity;
     exports br.com.coffe.explorer.core.domain.service;
+    exports br.com.coffe.explorer.core.domain.exception;
 }

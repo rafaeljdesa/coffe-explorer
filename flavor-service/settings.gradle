@@ -3,5 +3,5 @@ rootProject.name = 'flavor-service'
 include ':core-domain'
 project(':core-domain').projectDir = file('../core-domain')
 
-include ':log-service'
-project(':log-service').projectDir = file('../log-service')
+/*include ':log-service'
+project(':log-service').projectDir = file('../log-service')*/

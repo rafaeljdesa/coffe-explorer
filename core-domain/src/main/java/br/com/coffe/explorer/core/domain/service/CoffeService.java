@@ -3,7 +3,9 @@ package br.com.coffe.explorer.core.domain.service;
 import br.com.coffe.explorer.core.domain.entity.Coffe;
 import br.com.coffe.explorer.core.domain.entity.Flavor;
 import br.com.coffe.explorer.core.domain.exception.CoffeNotFoundException;
+import br.com.coffe.explorer.core.domain.exception.FileUploadException;
 import br.com.coffe.explorer.core.domain.exception.FlavorNotFoundException;
+import br.com.coffe.explorer.core.domain.model.CoffeImageResultModel;
 import br.com.coffe.explorer.core.domain.model.CoffeModel;
 import br.com.coffe.explorer.core.domain.model.factory.CoffeModelFactory;
 import br.com.coffe.explorer.core.domain.port.input.CoffeInbound;
@@ -14,10 +16,12 @@ import br.com.coffe.explorer.core.domain.port.output.ImageRepository;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 public class CoffeService implements CoffeInbound {
+
+    private static final String ERROR = "ERROR";
+    private static final String SUCCESS = "SUCCESS";
+    private static final String UNEXPECTED_ERROR_MSG = "Occurs an unexpected error";
 
     private final CoffeRepository coffeRepository;
     private final FlavorRepository flavorRepository;
@@ -56,16 +60,35 @@ public class CoffeService implements CoffeInbound {
     }
 
     @Override
-    public void uploadImages(Object[] images, String coffeId) {
+    public List<CoffeImageResultModel> uploadImages(Object[] images, String coffeId) {
+
         Coffe coffe = coffeRepository.findById(coffeId)
                 .orElseThrow(CoffeNotFoundException::new);
 
-        List<String> imagesUrls = Arrays.stream(images)
-                .map(imageRepository::uploadImage)
+        List<CoffeImageResultModel> imageResultModels = Arrays.stream(images)
+                .map(image -> {
+                    String fileName = null, url = null, reason = null, status = ERROR;
+                    try {
+                        fileName = imageRepository.getFileName(image);
+                        url = imageRepository.uploadImage(image);
+                        status = SUCCESS;
+                    } catch (FileUploadException fue) {
+                        reason = fue.getMessage();
+                    } catch (Exception ex) {
+                        reason = UNEXPECTED_ERROR_MSG;
+                    }
+                    return new CoffeImageResultModel(fileName, url, status, reason);
+                })
+                .toList();
+
+        List<String> imagesUrls= imageResultModels.stream()
+                .map(CoffeImageResultModel::url)
                 .filter(Objects::nonNull)
                 .toList();
 
         Coffe coffeWithImages = coffe.cloneUpdatingImages(imagesUrls);
         coffeRepository.updateCoffe(coffeWithImages);
+
+        return imageResultModels;
     }
 }

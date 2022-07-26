@@ -2,6 +2,7 @@ package br.com.coffe.explorer.coffe.service.controller;
 
 import br.com.coffe.explorer.coffe.service.model.CoffeJsonModel;
 import br.com.coffe.explorer.coffe.service.model.factory.CoffeJsonModelFactory;
+import br.com.coffe.explorer.core.domain.model.CoffeImageResultModel;
 import br.com.coffe.explorer.core.domain.model.CoffeModel;
 import br.com.coffe.explorer.core.domain.port.input.CoffeInbound;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 @RestController
@@ -40,9 +40,9 @@ public class CoffeRestController {
     }
 
     @PostMapping("/{coffeId}/images")
-    public ResponseEntity<?> uploadImage(@PathVariable("coffeId") String coffeId,
-                                         @RequestParam("files") MultipartFile[] files) {
-        coffeInbound.uploadImages(files, coffeId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<CoffeImageResultModel>> uploadImage(@PathVariable("coffeId") String coffeId,
+                                                                   @RequestParam("files") MultipartFile[] files) {
+        List<CoffeImageResultModel> imageResultModels = coffeInbound.uploadImages(files, coffeId);
+        return ResponseEntity.ok(imageResultModels);
     }
 }
