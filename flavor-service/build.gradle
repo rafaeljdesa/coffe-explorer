@@ -2,6 +2,14 @@ plugins {
 	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'org.springdoc.openapi-gradle-plugin' version '1.3.4'
+}
+
+openApi {
+	apiDocsUrl.set(System.properties.getProperty("apiDocsUrl", "http://localhost:8081/api-docs"))
+	outputDir.set(file("$buildDir/docs"))
+	outputFileName.set("swagger.json")
+	waitTimeInSeconds.set(30)
 }
 
 group = 'br.com.coffe.explorer'
@@ -29,6 +37,8 @@ dependencies {
 
 	implementation project(':core-domain')
 	//implementation project(':log-service')
+
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 }
 
 tasks.named('test') {

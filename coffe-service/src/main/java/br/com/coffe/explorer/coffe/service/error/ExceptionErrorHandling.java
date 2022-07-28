@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -16,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 public class ExceptionErrorHandling {
 
     @ExceptionHandler(CoffeNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorModel> coffeNotFoundException(CoffeNotFoundException ex, WebRequest request) {
         ErrorModel errorModel = new ErrorModel("Coffe not found", getTime());
         log.error(errorModel.description(), ex);
@@ -23,6 +25,7 @@ public class ExceptionErrorHandling {
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorModel> exception(Exception ex, WebRequest request) {
         ErrorModel errorModel = new ErrorModel("Ocorreu um erro", getTime());
         log.error(errorModel.description(), ex);

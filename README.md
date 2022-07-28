@@ -32,3 +32,15 @@ docker build --build-arg JAR_FILE=build/libs/*.jar -t coffexplorer/flavorservice
 ```
 docker run -p 8080:8080 coffexplorer/flavorservice:v1.0
 ```
+
+### Viewing API documentation
+
+Navigate to "/swagger-ui.html" and explore "/api-docs".
+
+### Generating Open API documentation
+
+```
+gradle clean generateOpenApiDocs -DapiDocsUrl={url}/api-docs
+```
+
+The doc file will be generated within /build/docs/
