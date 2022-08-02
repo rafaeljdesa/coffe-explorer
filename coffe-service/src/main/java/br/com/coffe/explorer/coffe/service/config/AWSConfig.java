@@ -1,41 +1,25 @@
 package br.com.coffe.explorer.coffe.service.config;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
 
 @Configuration
 public class AWSConfig {
 
-    @Value("${AWS_ACCESS_KEY_ID}")
-    private String accessKey;
-
-    @Value("${AWS_SECRET_ACCESS_KEY}")
-    private String secretKey;
+    private static final String DEFAULT_REGION = "us-east-1";
 
     @Value("${AWS_REGION}")
     private String region;
 
-    public AWSCredentials credentials() {
-        AWSCredentials credentials = new BasicAWSCredentials(
-                accessKey,
-                secretKey
-        );
-        return credentials;
-    }
-
     @Bean
-    public AmazonS3 amazonS3() {
-        AmazonS3 s3client = AmazonS3ClientBuilder
-                .standard()
-                .withCredentials(new AWSStaticCredentialsProvider(credentials()))
-                .withRegion(region)
+    public S3Client s3Client() {
+        final String awsRegion = region != null ? region : DEFAULT_REGION;
+        Region region = Region.of(awsRegion);
+        return S3Client.builder()
+                .region(region)
                 .build();
-        return s3client;
     }
 }

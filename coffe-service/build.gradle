@@ -39,8 +39,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	runtimeOnly 'com.h2database:h2:2.1.214'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'com.amazonaws:aws-java-sdk:1.12.264'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+	implementation platform('software.amazon.awssdk:bom:2.17.232')
+	implementation 'software.amazon.awssdk:s3'
 }
 
 dependencyManagement {

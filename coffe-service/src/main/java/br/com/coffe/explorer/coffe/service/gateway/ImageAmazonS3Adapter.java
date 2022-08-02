@@ -2,14 +2,15 @@ package br.com.coffe.explorer.coffe.service.gateway;
 
 import br.com.coffe.explorer.core.domain.exception.FileUploadException;
 import br.com.coffe.explorer.core.domain.port.output.ImageRepository;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.UUID;
@@ -28,9 +29,9 @@ public class ImageAmazonS3Adapter implements ImageRepository {
 
     private static final long IMAGE_MAX_SIZE_IN_BYTES = 10_000_000;
 
-    private final AmazonS3 amazonS3;
+    private final S3Client amazonS3;
 
-    public ImageAmazonS3Adapter(AmazonS3 amazonS3) {
+    public ImageAmazonS3Adapter(S3Client amazonS3) {
         this.amazonS3 = amazonS3;
     }
 
@@ -43,20 +44,17 @@ public class ImageAmazonS3Adapter implements ImageRepository {
 
             InputStream inputStream = multipartFile.getInputStream();
 
-            ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentLength(multipartFile.getBytes().length);
-            objectMetadata.setContentType(multipartFile.getContentType());
-
             String key = folder + "/" + UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
 
-            PutObjectRequest putObjectRequest = new PutObjectRequest(
-                    bucketName,
-                    key,
-                    inputStream,
-                    objectMetadata
-            ).withCannedAcl(CannedAccessControlList.Private);
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .acl(ObjectCannedACL.PRIVATE)
+                    .build();
 
-            amazonS3.putObject(putObjectRequest);
+            RequestBody requestBody = RequestBody.fromInputStream(inputStream, multipartFile.getSize());
+
+            amazonS3.putObject(putObjectRequest, requestBody);
 
             inputStream.close();
 
