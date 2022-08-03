@@ -10,14 +10,12 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Slf4j
 @Component
-public class ImageAmazonS3Adapter implements ImageRepository {
+public class ImageAmazonS3Adapter implements ImageRepository<MultipartFile> {
 
     @Value("${AWS_BUCKET_NAME}")
     private String bucketName;
@@ -25,22 +23,15 @@ public class ImageAmazonS3Adapter implements ImageRepository {
     @Value("${AWS_BUCKET_FOLDER}")
     private String folder;
 
-    private static final String[] VALID_IMAGE_TYPES = { "image/png", "image/jpeg" };
+    private final S3Client s3Client;
 
-    private static final long IMAGE_MAX_SIZE_IN_BYTES = 10_000_000;
-
-    private final S3Client amazonS3;
-
-    public ImageAmazonS3Adapter(S3Client amazonS3) {
-        this.amazonS3 = amazonS3;
+    public ImageAmazonS3Adapter(S3Client s3Client) {
+        this.s3Client = s3Client;
     }
 
     @Override
-    public String uploadImage(Object image) {
+    public String uploadImage(MultipartFile multipartFile) {
         try {
-            MultipartFile multipartFile = (MultipartFile) image;
-
-            validateImage(multipartFile);
 
             InputStream inputStream = multipartFile.getInputStream();
 
@@ -54,7 +45,7 @@ public class ImageAmazonS3Adapter implements ImageRepository {
 
             RequestBody requestBody = RequestBody.fromInputStream(inputStream, multipartFile.getSize());
 
-            amazonS3.putObject(putObjectRequest, requestBody);
+            s3Client.putObject(putObjectRequest, requestBody);
 
             inputStream.close();
 
@@ -67,17 +58,17 @@ public class ImageAmazonS3Adapter implements ImageRepository {
     }
 
     @Override
-    public String getFileName(Object image) {
-        MultipartFile multipartFile = (MultipartFile) image;
+    public String getFileName(MultipartFile multipartFile) {
         return multipartFile.getOriginalFilename();
     }
 
-    private void validateImage(MultipartFile file) {
-        if (!Arrays.asList(VALID_IMAGE_TYPES).contains(file.getContentType())) {
-            throw new FileUploadException("The content type of file is invalid");
-        }
-        if (file.getSize() > IMAGE_MAX_SIZE_IN_BYTES) {
-            throw new FileUploadException("The file size is invalid");
-        }
+    @Override
+    public String getContentType(MultipartFile multipartFile) {
+        return multipartFile.getContentType();
+    }
+
+    @Override
+    public long getFileSize(MultipartFile multipartFile) {
+        return multipartFile.getSize();
     }
 }

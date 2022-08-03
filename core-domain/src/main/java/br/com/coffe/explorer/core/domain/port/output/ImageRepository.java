@@ -1,7 +1,9 @@
 package br.com.coffe.explorer.core.domain.port.output;
 
-public interface ImageRepository {
+public interface ImageRepository<T> {
 
-    String uploadImage(Object image);
-    String getFileName(Object image);
+    String uploadImage(T image);
+    String getFileName(T image);
+    String getContentType(T image);
+    long getFileSize(T image);
 }

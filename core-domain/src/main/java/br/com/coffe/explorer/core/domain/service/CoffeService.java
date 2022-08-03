@@ -22,14 +22,18 @@ public class CoffeService implements CoffeInbound {
     private static final String ERROR = "ERROR";
     private static final String SUCCESS = "SUCCESS";
     private static final String UNEXPECTED_ERROR_MSG = "Occurs an unexpected error";
+    private static final String CONTENT_TYPE_INVALID_MSG = "The content type of file is invalid";
+    private static final String FILE_SIZE_INVALID_MSG = "The file size is invalid";
+    private static final String[] VALID_IMAGE_TYPES = { "image/png", "image/jpeg" };
+    private static final long IMAGE_MAX_SIZE_IN_BYTES = 10_000_000;
 
     private final CoffeRepository coffeRepository;
     private final FlavorRepository flavorRepository;
-    private final ImageRepository imageRepository;
+    private final ImageRepository<Object> imageRepository;
 
     public CoffeService(CoffeRepository coffeRepository,
                         FlavorRepository flavorRepository,
-                        ImageRepository imageRepository) {
+                        ImageRepository<Object> imageRepository) {
         this.coffeRepository = coffeRepository;
         this.flavorRepository = flavorRepository;
         this.imageRepository = imageRepository;
@@ -66,10 +70,12 @@ public class CoffeService implements CoffeInbound {
                 .orElseThrow(CoffeNotFoundException::new);
 
         List<CoffeImageResultModel> imageResultModels = Arrays.stream(images)
+                .parallel()
                 .map(image -> {
                     String fileName = null, url = null, reason = null, status = ERROR;
                     try {
                         fileName = imageRepository.getFileName(image);
+                        validateImage(image);
                         url = imageRepository.uploadImage(image);
                         status = SUCCESS;
                     } catch (FileUploadException fue) {
@@ -90,5 +96,17 @@ public class CoffeService implements CoffeInbound {
         coffeRepository.updateCoffe(coffeWithImages);
 
         return imageResultModels;
+    }
+
+    private void validateImage(Object image) {
+        String contentType = imageRepository.getContentType(image);
+        long fileSize = imageRepository.getFileSize(image);
+
+        if (!Arrays.asList(VALID_IMAGE_TYPES).contains(contentType)) {
+            throw new FileUploadException(CONTENT_TYPE_INVALID_MSG);
+        }
+        if (fileSize > IMAGE_MAX_SIZE_IN_BYTES) {
+            throw new FileUploadException(FILE_SIZE_INVALID_MSG);
+        }
     }
 }
