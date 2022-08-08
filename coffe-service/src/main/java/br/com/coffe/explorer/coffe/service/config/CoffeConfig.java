@@ -1,5 +1,6 @@
 package br.com.coffe.explorer.coffe.service.config;
 
+import br.com.coffe.explorer.coffe.service.gateway.error.CustomErrorDecoder;
 import br.com.coffe.explorer.core.domain.port.input.CoffeInbound;
 import br.com.coffe.explorer.core.domain.port.output.CoffeRepository;
 import br.com.coffe.explorer.core.domain.port.output.FlavorRepository;
@@ -14,6 +15,11 @@ public class CoffeConfig {
     @Bean
     public CoffeInbound coffeInbound(CoffeRepository coffeRepository, FlavorRepository flavorRepository, ImageRepository imageRepository) {
         return new CoffeService(coffeRepository, flavorRepository, imageRepository);
+    }
+
+    @Bean
+    public CustomErrorDecoder customErrorDecoder() {
+        return new CustomErrorDecoder();
     }
 
 }
