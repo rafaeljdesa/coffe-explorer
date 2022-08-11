@@ -34,7 +34,7 @@ docker build --build-arg JAR_FILE=build/libs/*.jar -t coffexplorer/flavorservice
 ### Running Docker Container
 
 ```
-docker run -p 8080:8080 coffexplorer/flavorservice:v1.0
+docker run -p 8080:8081 coffexplorer/flavorservice:v1.0
 ```
 
 ### Viewing API documentation
@@ -82,7 +82,7 @@ docker build --build-arg JAR_FILE=build/libs/*.jar -t coffexplorer/coffeservice:
 ### Running Docker Container
 
 ```
-docker run -p 8080:8080 coffexplorer/coffeservice:v1.0
+docker run -p 8080:8082 coffexplorer/coffeservice:v1.0
 ```
 
 ### Viewing API documentation
