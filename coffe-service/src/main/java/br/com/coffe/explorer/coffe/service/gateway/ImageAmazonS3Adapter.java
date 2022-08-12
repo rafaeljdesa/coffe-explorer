@@ -23,6 +23,9 @@ public class ImageAmazonS3Adapter implements ImageRepository<MultipartFile> {
     @Value("${AWS_BUCKET_FOLDER}")
     private String folder;
 
+    @Value("${IMAGE_SERVER_URL}")
+    private String imageServerUrl;
+
     private final S3Client s3Client;
 
     public ImageAmazonS3Adapter(S3Client s3Client) {
@@ -35,12 +38,15 @@ public class ImageAmazonS3Adapter implements ImageRepository<MultipartFile> {
 
             InputStream inputStream = multipartFile.getInputStream();
 
-            String key = folder + "/" + UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+            String fileName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename();
+
+            String key = folder + "/" + fileName;
 
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                     .bucket(bucketName)
                     .key(key)
                     .acl(ObjectCannedACL.PRIVATE)
+                    .contentType(multipartFile.getContentType())
                     .build();
 
             RequestBody requestBody = RequestBody.fromInputStream(inputStream, multipartFile.getSize());
@@ -49,7 +55,7 @@ public class ImageAmazonS3Adapter implements ImageRepository<MultipartFile> {
 
             inputStream.close();
 
-            return "https://" + bucketName + ".s3.amazonaws.com/" + key;
+            return imageServerUrl + fileName;
         } catch (Exception e) {
             String message = "Occurred an error to upload file to Amazon S3: " + e.getMessage();
             log.error(message, e);
