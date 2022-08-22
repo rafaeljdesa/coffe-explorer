@@ -1,0 +1,27 @@
+name: CI develop
+
+on:
+  push:
+    branches: 
+    - develop
+  pull_request:
+    branches:
+    - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      - name: Pushes core-domain to another repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+        with:
+          source-directory: 'core-domain'
+          destination-github-username: 'rafaeljdesa'
+          destination-repository-name: 'coffe-explorer-core-domain'
+          user-email: 'rafaeljdsb1@gmail.com'
+          target-branch: 'develop'
