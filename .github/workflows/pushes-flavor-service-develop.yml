@@ -16,7 +16,7 @@ jobs:
       - name: Pushes flavor-service to another repository
         uses: cpina/github-action-push-to-another-repository@main
         env:
-          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
+          SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY_FLAVOR_SERVICE }}
         with:
           source-directory: 'flavor-service'
           destination-github-username: 'rafaeljdesa'
