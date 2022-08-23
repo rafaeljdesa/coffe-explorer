@@ -2,15 +2,9 @@ name: CI core domain develop
 
 on:
   push:
-    branches: 
-    - develop
+    branches: [ develop ]
     paths:
-      - core-domain/**
-  pull_request:
-    branches:
-    - develop
-    paths:
-      - core-domain/**
+      - 'core-domain/**'
 
 jobs:
   build:
