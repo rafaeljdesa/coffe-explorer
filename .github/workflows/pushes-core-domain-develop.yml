@@ -1,4 +1,4 @@
-name: CI core domain develop
+name: Pushes core-domain to another repository (develop)
 
 on:
   push:
