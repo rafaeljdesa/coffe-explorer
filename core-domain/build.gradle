@@ -1,12 +1,37 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-group 'br.com.coffe.explorer.core.domain'
-version '1.0-SNAPSHOT'
+def groupId = 'br.com.coffe.explorer.core.domain'
+def artifactId = 'core-domain'
+def versionName = '1.0-SNAPSHOT'
+
+group groupId
+version versionName
 
 repositories {
     mavenCentral()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = groupId
+            artifactId = artifactId
+            version = versionName
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url 'https://coffe-explorer-457370070681.d.codeartifact.us-east-1.amazonaws.com/maven/core-domain/'
+            credentials {
+                username "aws"
+                password System.env.CODEARTIFACT_AUTH_TOKEN
+            }
+        }
+    }
 }
 
 dependencies {
