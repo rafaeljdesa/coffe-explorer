@@ -3,6 +3,7 @@ package br.com.coffe.explorer.flavor.service.controller;
 import br.com.coffe.explorer.core.domain.exception.FlavorNotFoundException;
 import br.com.coffe.explorer.core.domain.model.FlavorModel;
 import br.com.coffe.explorer.core.domain.port.input.FlavorInbound;
+import br.com.coffe.explorer.flavor.service.error.ExceptionErrorHandling;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,6 +34,7 @@ public class FlavorRestControllerTest {
         flavorRestController = new FlavorRestController(flavorInbound);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(flavorRestController)
+                .setControllerAdvice(new ExceptionErrorHandling())
                 .build();
     }
 
@@ -59,7 +61,7 @@ public class FlavorRestControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message", is("Flavors not found")));
+                .andExpect(jsonPath("$.description", is("Flavor not found")));
     }
 
     @Test
