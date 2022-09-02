@@ -19,6 +19,13 @@ repositories {
             password System.env.CODEARTIFACT_AUTH_TOKEN
         }
     }
+    mavenCentral {
+        url 'https://coffe-explorer-457370070681.d.codeartifact.us-east-1.amazonaws.com/maven/maven-central-store/'
+        credentials {
+            username "aws"
+            password System.env.CODEARTIFACT_AUTH_TOKEN
+        }
+    }
 }
 
 publishing {
