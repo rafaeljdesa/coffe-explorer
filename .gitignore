@@ -32,4 +32,6 @@ hs_err_pid*
 
 */.gradle/*
 
-core-domain/.gradle/*
+*.bin
+
+*.lock
