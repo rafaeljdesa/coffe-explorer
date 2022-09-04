@@ -11,7 +11,7 @@ group groupId
 version versionName
 
 repositories {
-    //mavenCentral()
+    mavenCentral()
     maven {
         url 'https://coffe-explorer-457370070681.d.codeartifact.us-east-1.amazonaws.com/maven/core-domain/'
         credentials {
