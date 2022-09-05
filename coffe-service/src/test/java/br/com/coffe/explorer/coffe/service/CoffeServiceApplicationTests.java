@@ -3,8 +3,8 @@ package br.com.coffe.explorer.coffe.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class CoffeServiceApplicationTests {
+//@SpringBootTest
+public class CoffeServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
