@@ -1,6 +1,5 @@
 # Base image
-#FROM openjdk:17-jdk-alpine
-FROM amazoncorretto:17
+FROM openjdk:17-jdk-alpine
 
 # Create a volume pointing to /tmp
 VOLUME /tmp
